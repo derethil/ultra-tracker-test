@@ -12,9 +12,11 @@ jobs:
         pnpm-version: [9]
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
+      # Get Latest
       - name: Check out Git repository
         uses: actions/checkout@v4
 
+      # Setup Tooling
       - name: Install pnpm v${{ matrix.pnpm-version }}
         uses: pnpm/action-setup@v4
         with:
@@ -26,9 +28,17 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
 
+      - name: Install NSIS
+        if: matrix.os == 'windows.latest'
+        run: |
+          choco install nsis -y
+          reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem /v LongPathsEnabled /t REG_DWORD /d 1 /f
+
+      # Dependencies
       - name: Install Dependencies
         run: pnpm install
 
+      # Build
       - name: Build Linux
         if: matrix.os == 'ubuntu-latest'
         run: pnpm build:linux
@@ -41,6 +51,7 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: pnpm build:win
 
+      # Push Files to Release
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
