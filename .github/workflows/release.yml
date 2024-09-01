@@ -1,8 +1,6 @@
 name: Build & Release Ultra Tracker
 on:
   push:
-    branches:
-      - main
     tags:
       - v*.*.*
 jobs:
@@ -41,7 +39,7 @@ jobs:
 
       - name: Build Windows
         if: matrix.os == 'windows-latest'
-        run: pnpm build:windows
+        run: pnpm build:win
 
       - name: Release
         uses: softprops/action-gh-release@v1
