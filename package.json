@@ -1,6 +1,6 @@
 {
   "name": "ultra-tracker",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Track athlete times in ultra marathons.",
   "main": "./out/main/index.js",
   "author": {
